@@ -1,0 +1,28 @@
+# Plant Disease Detection - Requirements
+# Python 3.8+ recommended
+
+# Web Framework
+Flask==1.1.2
+gunicorn==20.1.0
+Werkzeug==1.0.1
+click==7.1.2
+itsdangerous==1.1.0
+Jinja2==2.11.3
+MarkupSafe==1.1.1
+
+# Data Processing
+numpy==1.20.2
+pandas==1.2.4
+Pillow==8.2.0
+
+# Deep Learning (PyTorch CPU version)
+torch==1.8.1+cpu
+torchvision==0.9.1+cpu
+-f https://download.pytorch.org/whl/torch_stable.html
+
+# Vision Transformer (ViT) Dependencies
+timm>=0.9.0
+transformers>=4.30.0
+
+# Additional Dependencies
+typing-extensions==3.7.4.3
