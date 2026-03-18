@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .conf-badge {
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .conf-high {
+            background: #4caf50;
+            color: white;
+        }
+
+        .conf-medium {
+            background: #ff9800;
+            color: white;
+        }
+
+        .conf-low {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-history"></i> Prediction History</h1>
+            <p class="text-muted mb-0">View all your past predictions</p>
+        </div>
+
+        <div class="table-card">
+            <div class="mb-3">
+                <a href="/index" class="btn btn-primary">
+                    <i class="fas fa-upload"></i> New Prediction
+                </a>
+                <a href="/batch" class="btn btn-info">
+                    <i class="fas fa-images"></i> Batch Upload
+                </a>
+                <a href="/statistics" class="btn btn-success">
+                    <i class="fas fa-chart-bar"></i> Statistics
+                </a>
+            </div>
+
+            <table id="historyTable" class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Timestamp</th>
+                        <th>Filename</th>
+                        <th>Disease</th>
+                        <th>Confidence</th>
+                        <th>Inference Time</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pred in predictions %}
+                    <tr>
+                        <td>{{ pred[0] }}</td>
+                        <td>{{ pred[1][:19] }}</td>
+                        <td><i class="fas fa-image"></i> {{ pred[2] }}</td>
+                        <td>{{ pred[3]|replace('___', ' - ')|replace('_', ' ')|title }}</td>
+                        <td>
+                            {% if pred[4] >= 80 %}
+                            <span class="conf-badge conf-high">
+                                {% elif pred[4] >= 60 %}
+                                <span class="conf-badge conf-medium">
+                                    {% else %}
+                                    <span class="conf-badge conf-low">
+                                        {% endif %}
+                                        {{ "%.2f"|format(pred[4]) }}%
+                                    </span>
+                        </td>
+                        <td>{{ pred[5] }}</td>
+                        <td>
+                            <a href="/export/{{ pred[0] }}" class="btn btn-sm btn-outline-primary" title="Export PDF">
+                                <i class="fas fa-file-pdf"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#historyTable').DataTable({
+                order: [[0, 'desc']],
+                pageLength: 25,
+                language: {
+                    search: "Search predictions:"
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

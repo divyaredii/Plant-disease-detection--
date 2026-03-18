@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+<span data-translate="diseaseResult" data-disease-key="{{ title|lower|replace(' ', '_') }}">{{title}}</span>
+{% endblock pagetitle %}
+{% block body %}
+
+<div>
+  <div class="container">
+    <!-- For demo purpose -->
+    <div class="row mb-5 text-center text-white">
+      <div class="col-lg-10 mx-auto">
+        <h1 class="display-4" style="padding-top: 2%;font-weight: 400;color: rgb(4, 54, 4);"><b><span data-translate="diseaseResult" data-disease-key="{{ title|lower|replace(' ', '_') }}">{{title}}</span>🍂</b></h1>
+      </div>
+    </div>
+    <center>
+    <div class=" col">
+          <div class="p-3 bg-white shadow rounded-lg" style="width: 30%;">
+
+            <img src={{image_url}} width="350" height="350" alt="{{ title }}">
+
+          </div>
+      </div>
+      </center>
+      <br>
+      <div class=" row ">
+        <div class="col mx-auto">
+          <div class="p-5 bg-white shadow rounded-lg" style="height: 95%;">
+
+            <h5><b>
+                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
+                pred==24 or pred==25 or pred==28 or pred==38 %}
+                <span data-translate="healthyTipsTitle">Tips to Grow Healthy Plants</span>
+                {% else %}
+                <span data-translate="briefDescription">Brief Description</span>
+                {% endif %}
+              </b></h5>
+            <p><span data-translate="description" 
+                  data-disease-key="{{ title|lower|replace(' ', '_') }}_description">{{desc}}</span></p>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mx-auto">
+          <div class="p-5 bg-white shadow rounded-lg" style="height:95%">
+            <h5><b>
+                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
+                pred==24 or pred==25 or pred==28 or pred==38 %}
+                <span data-translate="benefitsTitle">Benefits</span>
+                {% else %}
+                <span data-translate="preventSteps">Prevent This Plant Disease By following these steps</span>
+                {% endif %}
+              </b></h5>
+            <p><span data-translate="prevention" 
+                  data-disease-key="{{ title|lower|replace(' ', '_') }}_prevention">{{prevent}}</span></p>
+          </div>
+        </div>
+
+        {% if pred!=4 %}
+        <div class="col mx-auto"">
+        <div class=" p-5 bg-white shadow rounded-lg" style="height: 95%;">
+          <center>
+            <h5><b>
+                {% if pred==3 or pred==5 or pred==7 or pred==11 or pred==15 or pred==18 or pred==20 or pred==23 or
+                pred==24 or pred==25 or pred==28 or pred==38 %}
+                <span data-translate="fertilizerTitle">Fertilizer</span>
+                {% else %}
+                <span data-translate="supplementsTitle">Supplements</span>
+                {% endif %}
+              </b></h5>
+            <br>
+            <img src={{simage}} width="300" height="350" alt="{{sname}}">
+            <br>
+            <br>
+            <h6><span data-translate="supplementName">{{sname}}</span></h6>
+
+            <a target="_blank" href={{buy_link}}><button type="button" class="btn btn-success"
+                style="background-color: #05380b;"><span data-translate="buyProduct">Buy Product</span></button></a>
+          </center>
+        </div>
+      </div>
+      {% endif %}
+
+    </div>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/disease_translations.js') }}"></script>
+<script>
+    // Function to update disease-specific translations
+    function updateDiseaseTranslations() {
+        const currentLang = localStorage.getItem('selectedLanguage') || 'en';
+        const translations = diseaseTranslations[currentLang] || diseaseTranslations['en'];
+        
+        document.querySelectorAll('[data-translate]').forEach(element => {
+            const key = element.getAttribute('data-translate');
+            const diseaseKey = element.getAttribute('data-disease-key');
+            
+            // If this element has a disease-specific key, use that for translation
+            if (diseaseKey && translations[diseaseKey]) {
+                element.textContent = translations[diseaseKey];
+            }
+            // Otherwise use the general translation key
+            else if (translations[key]) {
+                element.textContent = translations[key];
+            }
+        });
+    }
+
+    // Listen for language changes
+    window.addEventListener('languageChanged', function(event) {
+        const lang = event.detail.language;
+        localStorage.setItem('selectedLanguage', lang);
+        updateDiseaseTranslations();
+    });
+
+    // Initial translation update
+    document.addEventListener('DOMContentLoaded', function() {
+        updateDiseaseTranslations();
+    });
+</script>
+
+{% endblock body %}

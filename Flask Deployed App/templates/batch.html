@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Upload - Plant Disease Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .drop-zone {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 60px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: white;
+        }
+
+        .drop-zone:hover,
+        .drop-zone.dragover {
+            background: #f8f9fa;
+            border-color: #764ba2;
+            transform: scale(1.02);
+        }
+
+        .drop-zone i {
+            font-size: 4em;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .file-list {
+            margin-top: 20px;
+        }
+
+        .file-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn-process {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+
+        .btn-process:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="text-center mb-4">
+                    <i class="fas fa-images"></i> Batch Upload
+                </h2>
+                <p class="text-center text-muted">Upload multiple plant images for analysis</p>
+
+                {% if error %}
+                <div class="alert alert-danger">
+                    <i class="fas fa-exclamation-circle"></i> {{ error }}
+                </div>
+                {% endif %}
+
+                <form method="POST" enctype="multipart/form-data" id="batchForm">
+                    <div class="drop-zone" id="dropZone">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h4>Drag & Drop Images Here</h4>
+                        <p class="text-muted">or click to browse</p>
+                        <input type="file" name="images" id="fileInput" multiple accept="image/*"
+                            style="display: none;">
+                    </div>
+
+                    <div class="file-list" id="fileList"></div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-process" id="processBtn" disabled>
+                            <i class="fas fa-cogs"></i> Process Images
+                        </button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <a href="/index" class="btn btn-link">
+                        <i class="fas fa-arrow-left"></i> Back to Single Upload
+                    </a>
+                    <a href="/history" class="btn btn-link">
+                        <i class="fas fa-history"></i> View History
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const dropZone = document.getElementById('dropZone');
+        const fileInput = document.getElementById('fileInput');
+        const fileList = document.getElementById('fileList');
+        const processBtn = document.getElementById('processBtn');
+        let selectedFiles = [];
+
+        dropZone.addEventListener('click', () => fileInput.click());
+
+        fileInput.addEventListener('change', (e) => {
+            handleFiles(e.target.files);
+        });
+
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
+        });
+
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
+
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+            handleFiles(e.dataTransfer.files);
+        });
+
+        function handleFiles(files) {
+            selectedFiles = Array.from(files);
+            displayFiles();
+            processBtn.disabled = selectedFiles.length === 0;
+        }
+
+        function displayFiles() {
+            fileList.innerHTML = '';
+            selectedFiles.forEach((file, index) => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span><i class="fas fa-image"></i> ${file.name}</span>
+                    <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${index})">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        function removeFile(index) {
+            selectedFiles.splice(index, 1);
+
+            const dt = new DataTransfer();
+            selectedFiles.forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+
+            displayFiles();
+            processBtn.disabled = selectedFiles.length === 0;
+        }
+
+        document.getElementById('batchForm').addEventListener('submit', () => {
+            processBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+            processBtn.disabled = true;
+        });
+    </script>
+</body>
+
+</html>

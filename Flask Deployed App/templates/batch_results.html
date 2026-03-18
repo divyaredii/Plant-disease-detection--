@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Results - Plant Disease Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .result-item {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .result-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .result-content {
+            padding: 15px;
+        }
+
+        .confidence-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .conf-high {
+            background: #4caf50;
+            color: white;
+        }
+
+        .conf-medium {
+            background: #ff9800;
+            color: white;
+        }
+
+        .conf-low {
+            background: #f44336;
+            color: white;
+        }
+
+        .summary-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .stat-box {
+            display: inline-block;
+            margin: 0 20px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-check-circle"></i> Batch Processing Complete</h1>
+            <p>Analyzed {{ results|length }} images</p>
+        </div>
+
+        <div class="summary-card">
+            <h3>Summary</h3>
+            <div class="stat-box">
+                <div class="stat-value">{{ results|length }}</div>
+                <div>Images Processed</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-value">
+                    {{ "%.1f"|format(results|map(attribute='confidence')|map('replace', '%', '')|map('float')|sum /
+                    results|length) }}%
+                </div>
+                <div>Avg Confidence</div>
+            </div>
+        </div>
+
+        <div class="result-grid">
+            {% for result in results %}
+            <div class="result-item">
+                <img src="{{ url_for('static', filename=result.image_path) }}" class="result-image"
+                    alt="{{ result.filename }}">
+                <div class="result-content">
+                    <h5>{{ result.disease|replace('___', ' - ')|replace('_', ' ')|title }}</h5>
+                    <p class="text-muted mb-2">{{ result.filename }}</p>
+
+                    <div class="mb-2">
+                        <span class="badge badge-{{ result.risk_color|default('secondary') }} p-2">
+                            <i class="fas fa-exclamation-triangle"></i> {{ result.risk_level|default('Unknown') }}
+                        </span>
+                    </div>
+
+                    {% set conf_val = result.confidence|replace('%', '')|float %}
+                    {% if conf_val >= 80 %}
+                    <span class="confidence-badge conf-high">
+                        {% elif conf_val >= 60 %}
+                        <span class="confidence-badge conf-medium">
+                            {% else %}
+                            <span class="confidence-badge conf-low">
+                                {% endif %}
+                                <i class="fas fa-check-circle"></i> {{ result.confidence }}
+                            </span>
+
+                            <div class="mt-3">
+                                <small class="text-muted">
+                                    <i class="fas fa-clock"></i> {{ result.inference_time }}
+                                </small>
+                            </div>
+
+                            <details class="mt-2">
+                                <summary style="cursor: pointer;">Top 3 Predictions</summary>
+                                <ul class="mt-2">
+                                    {% for pred in result.top3 %}
+                                    <li>{{ pred.disease|replace('___', ' - ')|replace('_', ' ')|title }}: {{
+                                        pred.confidence }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </details>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/batch" class="btn btn-primary">
+                <i class="fas fa-upload"></i> Upload More Images
+            </a>
+            <a href="/history" class="btn btn-info">
+                <i class="fas fa-history"></i> View History
+            </a>
+            <a href="/statistics" class="btn btn-success">
+                <i class="fas fa-chart-bar"></i> View Statistics
+            </a>
+        </div>
+    </div>
+</body>
+
+</html>

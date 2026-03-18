@@ -1,0 +1,322 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+<span data-translate="plantDiseaseDetection">Plant Disease Detection</span>
+{% endblock pagetitle %}
+{% block body %}
+
+<style>
+  body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .hero-landing {
+    min-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 60px 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 4.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, #fff 0%, #d1fae5 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 30px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  .hero-content p {
+    font-size: 1.5rem;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 40px;
+    animation: fadeInUp 0.8s ease-out 0.2s both;
+  }
+
+  .cta-button {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 20px 60px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    border-radius: 50px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+    transition: all 0.3s ease;
+    animation: fadeInUp 0.8s ease-out 0.4s both;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .cta-button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 50px rgba(16, 185, 129, 0.5);
+    color: white;
+    text-decoration: none;
+  }
+
+  .features-badge {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 12px 30px;
+    border-radius: 50px;
+    margin: 10px;
+    color: white;
+    font-weight: 600;
+    animation: fadeIn 0.8s ease-out 0.6s both;
+  }
+
+  .plants-grid {
+    padding: 80px 0;
+  }
+
+  .plant-card {
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-radius: 24px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+    animation: fadeIn 0.8s ease-out both;
+  }
+
+  .plant-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+  }
+
+  .plant-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 16px;
+    margin-bottom: 15px;
+  }
+
+  .plant-card h5 {
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0;
+  }
+
+  .section-title {
+    font-size: 3rem;
+    font-weight: 800;
+    color: white;
+    text-align: center;
+    margin-bottom: 60px;
+    animation: fadeInDown 0.8s ease-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInDown {
+    from {
+      opacity: 0;
+      transform: translateY(-30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .hero-content h1 {
+      font-size: 2.5rem;
+    }
+
+    .hero-content p {
+      font-size: 1.1rem;
+    }
+
+    .section-title {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<div class="hero-landing">
+  <div class="container">
+    <div class="hero-content">
+      <h1 data-translate="plantDiseaseDetection">
+        🌿 Plant Disease Detection
+      </h1>
+      <p data-translate="aiEngineHelp">
+        Advanced AI-powered disease detection for healthy crops
+      </p>
+
+      <div class="mb-4">
+        <span class="features-badge">🎯 97-99% Accuracy</span>
+        <span class="features-badge">⚡ Instant Results</span>
+        <span class="features-badge">🌍 39 Disease Types</span>
+      </div>
+
+      <a href="/index" class="cta-button">
+        <i class="fas fa-brain"></i> Start AI Analysis
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Supported Plants Section -->
+<div class="plants-grid">
+  <div class="container">
+    <h2 class="section-title">Supported Plants & Crops</h2>
+
+    <div class="row g-4">
+      <!-- Row 1 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.1s;">
+          <img
+            src="https://post.healthline.com/wp-content/uploads/2020/09/Do_Apples_Affect_Diabetes_and_Blood_Sugar_Levels-732x549-thumbnail-1-732x549.jpg"
+            alt="Apple">
+          <h5 data-translate="apple">🍎 Apple</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.2s;">
+          <img src="https://www.supermarketperimeter.com/ext/resources/0430-blueberries.png?t=1588260305&width=1080"
+            alt="Blueberry">
+          <h5 data-translate="blueberry">🫐 Blueberry</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.3s;">
+          <img
+            src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/article_thumbnails/slideshows/health_benefits_of_cherries_slideshow/1800x1200_health_benefits_of_cherries_slideshow.jpg"
+            alt="Cherry">
+          <h5 data-translate="cherry">🍒 Cherry</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.4s;">
+          <img src="https://images.everydayhealth.com/images/diet-nutrition/corn-101-a-complete-guide-1440x810.jpg"
+            alt="Corn">
+          <h5 data-translate="corn">🌽 Corn</h5>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.5s;">
+          <img src="https://i.ndtvimg.com/i/2015-09/grapes_625x350_61443376353.jpg" alt="Grape">
+          <h5 data-translate="grape">🍇 Grape</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.6s;">
+          <img
+            src="https://www.jiomart.com/images/product/original/590000025/orange-imported-1-kg-product-images-o590000025-p590000025-0-202410011652.jpg"
+            alt="Orange">
+          <h5 data-translate="orange">🍊 Orange</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.7s;">
+          <img
+            src="https://img.webmd.com/dtmcms/live/webmd/consumer_assets/site_images/articles/health_tools/the_health_benefits_of_peaches_slideshow/thinkstock_rf_peaches.jpg?resize=650px:*"
+            alt="Peach">
+          <h5 data-translate="peach">🍑 Peach</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.8s;">
+          <img src="https://cdn.britannica.com/12/147312-050-BEC6A59E/Bell-peppers.jpg" alt="Pepper">
+          <h5 data-translate="pepperBell">🫑 Pepper Bell</h5>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 0.9s;">
+          <img
+            src="https://m.economictimes.com/thumb/height-450,width-600,imgsize-111140,msid-72862126/potato-getty.jpg"
+            alt="Potato">
+          <h5 data-translate="potato">🥔 Potato</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 1.0s;">
+          <img
+            src="https://i0.wp.com/cdn-prod.medicalnewstoday.com/content/images/articles/326/326272/raspberries-with-ketones-in-a-bowl.jpg?w=1155&h=1541"
+            alt="Raspberry">
+          <h5 data-translate="raspberry">🍇 Raspberry</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 1.1s;">
+          <img
+            src="https://m.economictimes.com/thumb/msid-66988154,width-1200,height-900,resizemode-4,imgsize-211276/soyabean-agencies.jpg"
+            alt="Soybean">
+          <h5 data-translate="soybean">🫘 Soybean</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="plant-card" style="animation-delay: 1.2s;">
+          <img
+            src="https://post.healthline.com/wp-content/uploads/2020/08/squash-fruit-or-vegetable-732x549-thumbnail-732x549.jpg"
+            alt="Squash">
+          <h5 data-translate="squash">🎃 Squash</h5>
+        </div>
+      </div>
+
+      <!-- Row 4 -->
+      <div class="col-md-3 col-sm-6 mx-auto">
+        <div class="plant-card" style="animation-delay: 1.3s;">
+          <img src="https://images.indianexpress.com/2020/02/strawberry-1200.jpg" alt="Strawberry">
+          <h5 data-translate="strawberry">🍓 Strawberry</h5>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6 mx-auto">
+        <div class="plant-card" style="animation-delay: 1.4s;">
+          <img src="https://images-prod.healthline.com/hlcmsresource/images/AN_images/tomatoes-1296x728-feature.jpg"
+            alt="Tomato">
+          <h5 data-translate="tomato">🍅 Tomato</h5>
+        </div>
+      </div>
+    </div>
+
+    <!-- CTA Button -->
+    <div class="text-center mt-5">
+      <a href="/index" class="cta-button">
+        <i class="fas fa-arrow-right"></i> Get Started Now
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+{% endblock body %}

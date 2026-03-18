@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+        }
+
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 3em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .chart-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-chart-line"></i> Statistics Dashboard</h1>
+            <p class="text-muted mb-0">Analytics and insights from your predictions</p>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="fas fa-images fa-3x text-primary mb-3"></i>
+                    <div class="stat-value">{{ stats.total }}</div>
+                    <div class="stat-label">Total Predictions</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="fas fa-percentage fa-3x text-success mb-3"></i>
+                    <div class="stat-value">{{ "%.1f"|format(stats.avg_confidence) }}%</div>
+                    <div class="stat-label">Avg Confidence</div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="stat-card">
+                    <i class="fas fa-virus fa-3x text-danger mb-3"></i>
+                    <div class="stat-value">{{ stats.top_diseases|length }}</div>
+                    <div class="stat-label">Unique Diseases</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-bar"></i> Top 10 Detected Diseases</h4>
+                    <canvas id="topDiseasesChart"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="chart-card">
+                    <h4><i class="fas fa-chart-line"></i> Predictions Over Time (Last 30 Days)</h4>
+                    <canvas id="dailyChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h4><i class="fas fa-list"></i> Disease Breakdown</h4>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Disease</th>
+                        <th>Count</th>
+                        <th>Percentage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for disease, count in stats.top_diseases %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ disease|replace('___', ' - ')|replace('_', ' ')|title }}</td>
+                        <td>{{ count }}</td>
+                        <td>{{ "%.1f"|format((count / stats.total) * 100) }}%</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <a href="/index" class="btn btn-primary">
+                <i class="fas fa-upload"></i> New Prediction
+            </a>
+            <a href="/history" class="btn btn-info">
+                <i class="fas fa-history"></i> View History
+            </a>
+            <a href="/batch" class="btn btn-success">
+                <i class="fas fa-images"></i> Batch Upload
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Top Diseases Chart
+        const topDiseasesCtx = document.getElementById('topDiseasesChart').getContext('2d');
+        new Chart(topDiseasesCtx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for disease, count in stats.top_diseases %}
+                    '{{ disease|replace("___", " - ")|replace("_", " ")|title|truncate(30) }}'{{ "," if not loop.last }}
+            {% endfor %}
+                ],
+            datasets: [{
+                label: 'Number of Detections',
+                data: [
+                    {% for disease, count in stats.top_diseases %}
+                        {{ count }}{{ "," if not loop.last }}
+            {% endfor %}
+        ],
+            backgroundColor: 'rgba(102, 126, 234, 0.7)',
+            borderColor: 'rgba(102, 126, 234, 1)',
+            borderWidth: 2
+                }]
+            },
+            options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+        });
+
+        // Daily Predictions Chart
+        const dailyCtx = document.getElementById('dailyChart').getContext('2d');
+        new Chart(dailyCtx, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for date, count in stats.daily_counts | reverse %}
+                    '{{ date }}'{{ "," if not loop.last }}
+            {% endfor %}
+                ],
+            datasets: [{
+                label: 'Predictions per Day',
+                data: [
+                    {% for date, count in stats.daily_counts | reverse %}
+                        {{ count }}{{ "," if not loop.last }}
+            {% endfor %}
+        ],
+            backgroundColor: 'rgba(118, 75, 162, 0.2)',
+            borderColor: 'rgba(118, 75, 162, 1)',
+            borderWidth: 2,
+            fill: true,
+            tension: 0.4
+                }]
+            },
+            options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+        });
+    </script>
+</body>
+
+</html>

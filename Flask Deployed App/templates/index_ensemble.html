@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌿 Ensemble Plant Disease Detection</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .header .subtitle {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .ensemble-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 0.9em;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .model-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .model-info h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .model-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .model-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .model-item i {
+            color: #667eea;
+            font-size: 1.2em;
+        }
+
+        .upload-area {
+            border: 3px dashed #667eea;
+            border-radius: 15px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-area:hover {
+            background: #f8f9fa;
+            border-color: #764ba2;
+        }
+
+        .upload-area.dragover {
+            background: #e8eaf6;
+            border-color: #667eea;
+            transform: scale(1.02);
+        }
+
+        .upload-icon {
+            font-size: 4em;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: #666;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .preview-container {
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .error {
+            background: #fee;
+            color: #c33;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #c33;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .feature-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 2em;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card h4 {
+            color: #333;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-leaf"></i>
+                Plant Disease Detection
+            </h1>
+            <p class="subtitle">Advanced Multi-Model AI System</p>
+            <div class="ensemble-badge">
+                <i class="fas fa-brain"></i>
+                <span>{{ num_models }} AI Models Ensemble</span>
+            </div>
+        </div>
+
+        {% if error %}
+        <div class="error">
+            <i class="fas fa-exclamation-circle"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <div class="model-info">
+            <h3><i class="fas fa-microchip"></i> Active Models</h3>
+            <div class="model-list">
+                {% for model in model_names %}
+                <div class="model-item">
+                    <i class="fas fa-check-circle"></i>
+                    <span><strong>{{ model|replace('_', ' ')|title }}</strong></span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <form method="POST" action="/predict" enctype="multipart/form-data" id="uploadForm">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    <strong>Click to upload</strong> or drag and drop
+                </div>
+                <p style="color: #999; font-size: 0.9em;">PNG, JPG, JPEG (Max 10MB)</p>
+                <input type="file" name="image" id="fileInput" class="file-input" accept="image/*" required>
+            </div>
+
+            <div class="preview-container" id="previewContainer">
+                <img id="previewImage" class="preview-image" alt="Preview">
+            </div>
+
+            <button type="submit" class="btn" id="submitBtn">
+                <i class="fas fa-search"></i> Analyze Plant Disease
+            </button>
+        </form>
+
+        <div class="features">
+            <div class="feature-card">
+                <i class="fas fa-tachometer-alt"></i>
+                <h4>98-99.5%</h4>
+                <p>Accuracy</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-bolt"></i>
+                <h4>&lt;300ms</h4>
+                <p>Inference</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt"></i>
+                <h4>Robust</h4>
+                <p>Multi-Model</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewImage = document.getElementById('previewImage');
+        const submitBtn = document.getElementById('submitBtn');
+
+        // Click to upload
+        uploadArea.addEventListener('click', () => fileInput.click());
+
+        // File selection
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                displayPreview(file);
+            }
+        });
+
+        // Drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+
+            const file = e.dataTransfer.files[0];
+            if (file && file.type.startsWith('image/')) {
+                fileInput.files = e.dataTransfer.files;
+                displayPreview(file);
+            }
+        });
+
+        function displayPreview(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImage.src = e.target.result;
+                previewContainer.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Form submission
+        document.getElementById('uploadForm').addEventListener('submit', () => {
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
+            submitBtn.disabled = true;
+        });
+    </script>
+</body>
+
+</html>

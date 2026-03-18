@@ -1,0 +1,958 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bttn.css/0.2.4/bttn.css">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+
+    <!-- PWA Manifest & Meta -->
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+    <meta name="theme-color" content="#28a745">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='images/logo.png') }}" <title> {% block pagetitle
+    %}
+
+    {% endblock pagetitle %}</title>
+    <style>
+        .bg {
+
+            background-image: url("images/background.jpeg");
+
+            height: 100%;
+
+            /* Center and scale the image nicely */
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .file-upload input[type='file'] {
+            display: none;
+        }
+
+        body {
+            background-color: #4ECC5A;
+            /* background: -webkit-linear-gradient(to right, #66a776, #043610);
+            background: linear-gradient(to right, #5d9c6a, #059b0d); */
+            height: 100vh;
+        }
+
+        .rounded-lg {
+            border-radius: 1rem;
+        }
+
+        .custom-file-label.rounded-pill {
+            border-radius: 50rem;
+        }
+
+        .custom-file-label.rounded-pill::after {
+            border-radius: 0 50rem 50rem 0;
+        }
+
+        label {
+            background-color: rgb(2, 46, 15);
+            color: white;
+            padding: 0.5rem;
+            font-family: sans-serif;
+            border-radius: 0.3rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        #file-chosen {
+            margin-left: 0.3rem;
+            font-family: sans-serif;
+        }
+
+        .footer-basic {
+            padding: 40px 0;
+            background-color: #042908;
+            color: #f1f3f5;
+        }
+
+        .footer-basic ul {
+            padding: 0;
+            list-style: none;
+            text-align: center;
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 0;
+        }
+
+        .footer-basic li {
+            padding: 0 10px;
+        }
+
+        .footer-basic ul a {
+            color: inherit;
+            text-decoration: none;
+            opacity: 0.8;
+        }
+
+        .footer-basic ul a:hover {
+            opacity: 1;
+        }
+
+        .footer-basic .social {
+            text-align: center;
+            padding-bottom: 25px;
+        }
+
+        .footer-basic .social>a {
+            font-size: 24px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            display: inline-block;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px solid #ccc;
+            margin: 0 8px;
+            color: inherit;
+            opacity: 0.75;
+        }
+
+        .footer-basic .social>a:hover {
+            opacity: 0.9;
+        }
+
+        .footer-basic .copyright {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 13px;
+            color: #aaa;
+            margin-bottom: 0;
+        }
+    </style>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,te,hi,ta',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <style>
+        .goog-te-gadget-simple {
+            background-color: white !important;
+            border: none !important;
+            padding: 8px 15px !important;
+            border-radius: 20px !important;
+            font-family: 'Poppins', sans-serif !important;
+        }
+
+        .goog-te-gadget-simple .goog-te-menu-value {
+            color: #28a745 !important;
+            font-weight: bold;
+        }
+
+        .goog-te-menu-frame {
+            z-index: 9999999 !important;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark"
+        style="background-color: rgba(5, 56, 11, 0.95); backdrop-filter: blur(10px);">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="logo-img">
+                    <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z" />
+                    <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12" />
+                </svg>
+                <span class="ms-2 fw-bold" style="color: #ffffff; font-size: 1.8rem;">Plant Care AI</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+                aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" style="color: #ffffff !important; font-size: 1.4rem;" href="/">Home</a>
+                    </li>
+                    <li class="nav-item mx-3">
+                        <a class="nav-link" style="color: #ffffff !important; font-size: 1.4rem;" href="/index">AI
+                            Engine</a>
+                    </li>
+
+                    <li class="nav-item mx-3">
+                        <div id="google_translate_element"></div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% block body %}
+    .navbar-nav .nav-link {
+    font-size: 1.2rem;
+    color: #ffffff !important;
+    font-weight: 500;
+    padding: 0.8rem 1.2rem;
+    transition: color 0.3s ease;
+    }
+
+    .navbar-nav .nav-link:hover {
+    color: #4ECC5A !important;
+    }
+
+    .navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 600;
+    }
+
+    {% endblock body %}
+    <div class="footer-basic">
+        <footer>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a href="/" data-translate="home">Home</a></li>
+                <li class="list-inline-item"><a target="_blank" href="https://www.krsikx.com/"
+                        data-translate="services">Services</a></li>
+                <li class="list-inline-item"><a target="_blank" href="https://www.krsikx.com/copy-of-solutions"
+                        data-translate="about">About</a></li>
+                <li class="list-inline-item laptop"><a href="/index" data-translate="aiEngine">AI Engine</a></li>
+            </ul>
+        </footer>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+        crossorigin="anonymous"></script>
+
+    <script>
+        // Store translations for all content
+        const translations = {
+            en: {
+                // Navigation & Common
+                home: 'Home',
+                aiEngine: 'AI Engine',
+                supplements: 'Supplements',
+                cropAdvisor: 'Crop Advisor',
+                language: 'Language',
+                brandName: 'Plant Care AI',
+                services: 'Services',
+                about: 'About',
+
+                // Home page
+                plantDiseaseDetection: '🍁Plant Disease Detection🍁',
+                aiEngineHelp: 'This AI Engine System Will Help To Detect Disease From Following Fruits and Veggies',
+                note: 'Note✍🏻',
+                openLaptop: 'Please🙏 Open This Site On Laptop/PC 💻 Screen Only',
+                thankYou: 'Thank You 🤝',
+
+                // AI Engine page
+                uploadImage: 'Upload Image',
+                chooseFile: 'Choose File',
+                noFileChosen: 'No file chosen',
+                predict: 'Predict',
+                uploadInstructions: 'Simply upload your plant\'s leaf image and then see the AI Engines prediction ',
+                openCamera: 'Open Camera',
+                capturePhoto: 'Capture Photo',
+                whyDetectDisease: 'Why is it necessary to detect disease in plant?',
+                diseaseExplanation: 'Plant diseases affect the growth of their respective species. In addition, some research gaps are identified from which to obtain greater transparency for detecting diseases in plants, even before their symptoms appear clearly. Diagnosis is one of the most important aspects of a plant pathologist\'s training. Without proper identification of the disease and the disease-causing agent, disease control measures can be a waste of time and money and can lead to further plant losses. Proper disease diagnosis is necessary.',
+                preventStepsTitle: 'Prevent Plant Disease follow below steps:',
+                preventStep1: 'Follow Good Sanitation Practices.',
+                preventStep2: 'Fertilize to Keep Your Plants Healthy.',
+                preventStep3: 'Inspect Plants for Diseases Before You Bring Them Home.',
+                preventStep4: 'Allow the Soil to Warm Before Planting.',
+                preventStep5: 'Ensure a Healthy Vegetable Garden By Rotating Crops.',
+                preventStep6: 'Provide Good Air Circulation',
+                preventStep7: 'Remove Diseased Stems and Foliage',
+                moreInfo: 'More info',
+                submit: 'Submit',
+
+                // Supplements page
+                supplementsTitle: '🛒Supplements🛒',
+                supplementsDescription: 'Buy Supplements & Fertilizer at one place',
+                buyProduct: 'Buy Product',
+                healthy: 'Healthy',
+                diseased: 'Diseased',
+                fertilizer: 'Fertilizer',
+                forText: 'For',
+
+                // Crop Advisor page
+                cropRecommendation: 'Crop Recommendation',
+                findSuitableCrop: 'Find out the most suitable crop to grow in your farm',
+                nitrogen: 'Nitrogen',
+                phosphorous: 'Phosphorous',
+                potassium: 'Potassium',
+                phLevel: 'pH level',
+                rainfall: 'Rainfall (in mm)',
+                state: 'State',
+                city: 'City',
+                predictionResult: 'Prediction Result',
+                enterValueExample: 'Enter the value (example:50)',
+                enterValue: 'Enter the value',
+
+                // Fruits and veggies
+                apple: 'Apple',
+                blueberry: 'Blueberry',
+                cherry: 'Cherry',
+                corn: 'Corn',
+                grape: 'Grape',
+                orange: 'Orange',
+                peach: 'Peach',
+                pepperBell: 'Pepper Bell',
+                potato: 'Potato',
+                raspberry: 'Raspberry',
+                soybean: 'Soybean',
+                squash: 'Squash',
+                strawberry: 'Strawberry',
+                tomato: 'Tomato',
+                supplementMarket: 'Supplement Market',
+                supplementsTagline: 'Buy Supplements & Fertilizer at one place',
+
+                // Disease Detection Results
+                diseaseResult: "Disease Detection Result",
+                healthyTipsTitle: "Tips to Grow Healthy Plants :",
+                briefDescription: "Brief Description :",
+                benefitsTitle: "Benefits :",
+                preventSteps: "Prevent This Plant Disease By following these steps :",
+                fertilizerTitle: "Fertilizer :",
+                supplementsTitle: "Supplements :",
+                buyProduct: "Buy Product",
+
+                // Disease Specific Translations
+                potato_early_blight_description: "In most production areas, early blight occurs annually to some degree. The severity of early blight is dependent upon the frequency of foliar wetness from rain, dew, or irrigation; the nutritional status of the foliage; and cultivar susceptibility. The first symptoms of early blight appear as small, circular or irregular, dark-brown to black spots on the older (lower) leaves. These spots enlarge up to 3/8 inch in diameter and gradually may become angular-shaped. Initial lesions on young, fully expanded leaves may be confused with brown spot lesions. These first lesions appear about two to three days after infection, with further sporulation on the surface of these lesions occurring three to five days later.",
+                potato_early_blight_prevention: "Treatment of early blight includes prevention by planting potato varieties that are resistant to the disease; late maturing are more resistant than early maturing varieties. Avoid overhead irrigation and allow for sufficient aeration between plants to allow the foliage to dry as quickly as possible.",
+
+                apple_scab_description: "Apple scab is a common disease of apple trees caused by the fungus Venturia inaequalis. The disease appears as olive-green to brown spots on leaves and fruit. Severe infections can cause defoliation and reduce fruit quality and yield.",
+                apple_scab_prevention: "To prevent apple scab: 1) Remove fallen leaves in autumn, 2) Prune trees to improve air circulation, 3) Apply fungicides during the growing season, 4) Plant resistant varieties when possible.",
+
+                apple_black_rot_description: "Black rot is a fungal disease that affects apple trees, causing leaf spots, fruit rot, and cankers on branches. The disease can affect all parts of the tree and can be particularly damaging to fruit.",
+                apple_black_rot_prevention: "Control measures include: 1) Pruning out dead or diseased wood, 2) Removing mummified fruit, 3) Maintaining good sanitation, 4) Using fungicides when necessary.",
+
+                tomato_late_blight_description: "Late blight is a devastating disease of tomatoes caused by Phytophthora infestans. It causes large, dark brown patches on leaves and can quickly kill entire plants. Fruit develops large, firm, dark brown spots.",
+                tomato_late_blight_prevention: "Prevent late blight by: 1) Using resistant varieties, 2) Improving air circulation, 3) Watering at the base of plants, 4) Applying fungicides preventively in wet weather.",
+
+                corn_common_rust_description: "Common rust appears as small, round to elongate brown pustules on both leaf surfaces. The pustules contain rust-colored spores that can easily be rubbed off. Severe infections can cause significant yield loss.",
+                corn_common_rust_prevention: "Management strategies include: 1) Planting resistant hybrids, 2) Early planting, 3) Monitoring fields regularly, 4) Applying fungicides when necessary.",
+
+                grape_black_rot_description: "Black rot is one of the most serious diseases of grapes. The fungus can infect all green parts of the vine. On leaves, brown circular lesions develop. Infected fruits shrivel into hard, black mummies.",
+                grape_black_rot_prevention: "Control measures: 1) Remove mummified fruit, 2) Prune and dispose of infected canes, 3) Maintain good air circulation, 4) Apply protective fungicides.",
+
+                pepper_bacterial_spot_description: "Bacterial spot causes small, dark brown spots on leaves and fruits. Spots may merge to form large areas of dead tissue. Severely infected leaves may yellow and drop. Fruit spots make peppers unmarketable.",
+                pepper_bacterial_spot_prevention: "Prevention includes: 1) Using disease-free seeds, 2) Rotating crops, 3) Avoiding overhead irrigation, 4) Maintaining good air circulation, 5) Using copper-based sprays."
+            },
+            te: {
+                // Navigation & Common
+                home: 'హోమ్',
+                aiEngine: 'AI ఇంజిన్',
+                supplements: 'సప్లిమెంట్స్',
+                cropAdvisor: 'పంట సలహాదారు',
+                language: 'భాష',
+                brandName: 'మొక్క సంరక్షణ AI',
+                services: 'సేవలు',
+                about: 'గురించి',
+
+                // Home page
+                plantDiseaseDetection: '🍁మొక్క వ్యాధి గుర్తింపు🍁',
+                aiEngineHelp: 'ఈ AI ఇంజిన్ కింది పండ్లు మరియు కూరగాయల నుండి వ్యాధిని గుర్తించడానికి సహాయపడుతుంది',
+                note: 'గమనిక✍🏻',
+                openLaptop: 'దయచేసి🙏 ఈ సైట్‌ని ల్యాప్‌టాప్/PC 💻 స్క్రీన్‌లో మాత్రమే తెరవండి',
+                thankYou: 'ధన్యవాదాలు 🤝',
+
+                // AI Engine page
+                uploadImage: 'చిత్రాన్ని అప్‌లోడ్ చేయండి',
+                chooseFile: 'ఫైల్‌ని ఎంచుకోండి',
+                noFileChosen: 'ఫైల్ ఎంచుకోలేదు',
+                predict: 'అంచనా వేయండి',
+                uploadInstructions: 'మీ మొక్క ఆకు చిత్రాన్ని అప్‌లోడ్ చేసి AI మ్యాజిక్‌ని చూడండి',
+                openCamera: 'కెమెరా తెరవండి',
+                capturePhoto: 'ఫోటో తీయండి',
+                whyDetectDisease: 'మొక్కలో వ్యాధిని గుర్తించడం ఎందుకు అవసరం?',
+                diseaseExplanation: 'మొక్క వ్యాధులు వాటి జాతుల పెరుగుదలను ప్రభావితం చేస్తాయి. అంతేకాకుండా, మొక్కలలో వ్యాధులను గుర్తించడానికి కొన్ని పరిశోధన అంతరాలు గుర్తించబడ్డాయి, వాటి లక్షణాలు స్పష్టంగా కనిపించే ముందే. రోగ నిర్ధారణ అనేది మొక్కల వైద్యుని శిక్షణలో అత్యంత ముఖ్యమైన అంశాలలో ఒకటి. వ్యాధి మరియు వ్యాధి కారక కారకాన్ని సరిగ్గా గుర్తించకపోతే, వ్యాధి నియంత్రణ చర్యలు సమయం మరియు డబ్బు వృధా అవుతాయి మరియు మరింత మొక్కల నష్టానికి దారితీస్తాయి. సరైన వ్యాధి నిర్ధారణ అవసరం.',
+                preventStepsTitle: 'మొక్క వ్యాధిని నివారించడానికి కింది దశలను అనుసరించండి:',
+                preventStep1: 'మంచి పారిశుధ్య పద్ధతులను అనుసరించండి.',
+                preventStep2: 'మీ మొక్కలను ఆరోగ్యంగా ఉంచడానికి ఎరువులు వేయండి.',
+                preventStep3: 'మొక్కలను ఇంటికి తీసుకురావడానికి ముందు వ్యాధుల కోసం పరిశీలించండి.',
+                preventStep4: 'నాటడానికి ముందు నేల వేడెక్కనివ్వండి.',
+                preventStep5: 'పంటల మార్పిడి ద్వారా ఆరోగ్యకరమైన కూరగాయల తోటను నిర్ధారించండి.',
+                preventStep6: 'మంచి గాలి ప్రసరణను అందించండి',
+                preventStep7: 'వ్యాధిగ్రస్త కాండాలు మరియు ఆకులను తొలగించండి',
+                moreInfo: 'మరింత సమాచారం',
+                submit: 'సమర్పించండి',
+
+                // Supplements page
+                supplementsTitle: '🛒సప్లిమెంట్స్🛒',
+                supplementsDescription: 'సప్లిమెంట్స్ & ఎరువులను ఒకే చోట కొనండి',
+                buyProduct: 'ఉత్పత్తిని కొనండి',
+                healthy: 'ఆరోగ్యకరమైన',
+                diseased: 'వ్యాధిగ్రస్త',
+                fertilizer: 'ఎరువు',
+                forText: 'కోసం',
+
+                // Crop Advisor page
+                cropRecommendation: 'పంట సిఫార్సు',
+                findSuitableCrop: 'మీ పొలంలో పండించడానికి అత్యంత అనుకూలమైన పంటను కనుగొనండి',
+                nitrogen: 'నైట్రోజన్',
+                phosphorous: 'ఫాస్పరస్',
+                potassium: 'పొటాషియం',
+                phLevel: 'pH స్థాయి',
+                rainfall: 'వర్షపాతం (మిమీలో)',
+                state: 'రాష్ట్రం',
+                city: 'నగరం',
+                predictionResult: 'అంచనా ఫలితం',
+                enterValueExample: 'విలువను నమోదు చేయండి (ఉదాహరణ:50)',
+                enterValue: 'విలువను నమోదు చేయండి',
+
+                // Fruits and veggies
+                apple: 'యాపిల్',
+                blueberry: 'బ్లూబెర్రీ',
+                cherry: 'చెర్రీ',
+                corn: 'మొక్కజొన్న',
+                grape: 'ద్రాక్ష',
+                orange: 'నారింజ',
+                peach: 'పీచ్',
+                pepperBell: 'క్యాప్సికమ్',
+                potato: 'బంగాళాదుంప',
+                raspberry: 'రాస్ప్‌బెర్రీ',
+                soybean: 'సోయాబీన్',
+                squash: 'గుమ్మడి',
+                strawberry: 'స్ట్రాబెర్రీ',
+                tomato: 'టొమాటో',
+
+                // Disease Detection Results
+                diseaseResult: "వ్యాధి గుర్తింపు ఫలితం",
+                healthyTipsTitle: "ఆరోగ్యకరమైన మొక్కలను పెంచడానికి చిట్కాలు :",
+                briefDescription: "సంక్షిప్త వివరణ :",
+                benefitsTitle: "ప్రయోజనాలు :",
+                preventSteps: "ఈ మొక్క వ్యాధిని నివారించడానికి ఈ దిగువ దశలను అనుసరించండి :",
+                fertilizerTitle: "ఎరువు :",
+                supplementsTitle: "పోషకాలు :",
+                buyProduct: "ఉత్పత్తిని కొనండి",
+
+                // Disease Specific Translations
+                potato_early_blight_description: "చాలా ఉత్పత్తి ప్రాంతాలలో, ప్రారంభ బ్లాయిట్ సాలానికి కొంత మేరకు సంభవిస్తుంది. ప్రారంభ బ్లాయిట్ తీవ్రత వర్షం, మంచు లేదా నీటిపారుదల నుండి ఆకుల తడి తరచుదనంపై; ఆకుల పోషక స్థితి; మరియు సాగు చేయదగిన సున్నితత్వంపై ఆధారపడి ఉంటుంది. ప్రారంభ బ్లాయిట్ యొక్క మొదటి లక్షణాలు పాత (దిగువ) ఆకులపై చిన్న, వృత్తాకార లేదా అక్రమ, ముదురు గోధుమ నుండి నలుపు మచ్చలుగా కనిపిస్తాయి. ఈ మచ్చలు 3/8 అంగుళం వ్యాసం వరకు పెరుగుతాయి మరియు క్రమంగా కోణాకార ఆకారంలోకి మారవచ్చు. యువ, పూర్తిగా విస్తరించిన ఆకులపై ప్రారంభ క్షతాలు గోధుమ మచ్చ క్షతాలో గందరగోళానికి గురి కావచ్చు. ఈ మొదటి క్షతాలు సోకిన రెండు నుండి మూడు రోజుల తర్వాత కనిపిస్తాయి, ఈ క్షతాల ఉపరితలంపై మరింత స్పోరులేషన్ మూడు నుండి ఐదు రోజుల తర్వాత జరుగుతుంది.",
+                potato_early_blight_prevention: "వ్యాధి నిరోధక శక్తి గల బంగాళాదుంప రకాలను నాటడం ద్వారా ప్రారంభ బ్లాయిట్ చికిత్స నివారణను కలిగి ఉంటుంది; ఆలస్యంగా పరిపక్వం చెందే రకాలు తొందరగా పరిపక్వం చెందే రకాల కంటే ఎక్కువ నిరోధకత కలిగి ఉంటాయి. ఓవర్‌హెడ్ నీటిపారుదలను నివారించండి మరియు ఆకులు వీలైనంత త్వరగా ఆరిపోవడానికి మొక్కల మధ్య తగినంత గాలి ప్రసరణను అనుమతించండి.",
+
+                apple_scab_description: "యాపిల్ స్కాబ్ వెంట్యూరియా ఇనెక్వాలిస్ శిలీంధ్రం వల్ల కలిగే యాపిల్ చెట్ల సాధారణ వ్యాధి. ఆకులు మరియు పండ్లపై ఆలివ్ ఆకుపచ్చ నుండి గోధుమ రంగు మచ్చలుగా వ్యాధి కనిపిస్తుంది. తీవ్రమైన సోకినప్పుడు ఆకులు రాలిపోవడం మరియు పండ్ల నాణ్యత మరియు దిగుబడి తగ్గవచ్చు.",
+                apple_scab_prevention: "యాపిల్ స్కాబ్‌ని నివారించడానికి: 1) శరదృతువులో రాలిన ఆకులను తొలగించండి, 2) గాలి ప్రసరణను మెరుగుపరచడానికి చెట్లను కత్తిరించండి, 3) పెరుగుదల సీజన్‌లో శిలీంధ్రనాశినులను వర్తించండి, 4) సాధ్యమైనప్పుడు నిరోధక రకాలను నాటండి.",
+
+                apple_black_rot_description: "బ్లాక్ రాట్ అనేది యాపిల్ చెట్లను ప్రభావితం చేసే శిలీంధ్ర వ్యాధి, ఆకుల మచ్చలు, పండ్ల కుళ్ళు మరియు కొమ్మలపై క్యాంకర్లను కలిగిస్తుంది. వ్యాధి చెట్టు అన్ని భాగాలను ప్రభావితం చేయవచ్చు మరియు ప్రత్యేకించి పండ్లకు హానికరం కావచ్చు.",
+                apple_black_rot_prevention: "నియంత్రణ చర్యలలో ఇవి ఉన్నాయి: 1) చనిపోయిన లేదా వ్యాధిగ్రస్త కలపను కత్తిరించడం, 2) మమ్మీకరించిన పండ్లను తొలగించడం, 3) మంచి పారిశుద్ధ్యాన్ని నిర్వహించడం, 4) అవసరమైనప్పుడు శిలీంధ్రనాశినులను ఉపయోగించడం.",
+
+                tomato_late_blight_description: "లేట్ బ్లైట్ అనేది ఫైటోఫ్తోరా ఇన్‌ఫెస్టాన్స్ వల్ల కలిగే టమాటాల విధ్వంసక వ్యాధి. ఇది ఆకులపై పెద్ద, ముదురు గోధుమ రంగు మచ్చలను కలిగిస్తుంది మరియు మొత్తం మొక్కలను త్వరగా చంపవచ్చు. పండు పెద్ద, గట్టి, ముదురు గోధుమ రంగు మచ్చలను అభివృద్ధి చేస్తుంది.",
+                tomato_late_blight_prevention: "లేట్ బ్లైట్‌ని ఈ విధంగా నివారించండి: 1) నిరోధక రకాలను ఉపయోగించడం, 2) గాలి ప్రసరణను మెరుగుపరచడం, 3) మొక్కల వద్ద నీరు పోయడం, 4) తడి వాతావరణంలో నివారణ శిలీంధ్రనాశినులను వర్తించడం.",
+
+                corn_common_rust_description: "కామన్ రస్ట్ రెండు ఆకు ఉపరితలాలపై చిన్న, గుండ్రని నుండి పొడవైన గోధుమ రంగు పుస్తులుగా కనిపిస్తుంది. పుస్తులలో తేలికగా తుట్టిచివేయగల తుప్పు-రంగు స్పోర్‌లు ఉంటాయి. తీవ్రమైన సోకినప్పుడు గణనీయమైన దిగుబడి నష్టం కలగవచ్చు.",
+                corn_common_rust_prevention: "నిర్వహణ వ్యూహాలలో ఇవి ఉన్నాయి: 1) నిరోధక హైబ్రిడ్‌లను నాటడం, 2) ముందస్తు నాటడం, 3) పొలాలను క్రమం తప్పకుండా పర్యవేక్షించడం, 4) అవసరమైనప్పుడు శిలీంధ్రనాశినులను వర్తించడం.",
+
+                grape_black_rot_description: "బ్లాక్ రాట్ ద్రాక్ష యొక్క అత్యంత తీవ్రమైన వ్యాధులలో ఒకటి. శిలీంధ్రం తీగ యొక్క అన్ని ఆకుపచ్చ భాగాలను సోకవచ్చు. ఆకులపై, గోధుమ రంగు వృత్తాకార చర్మవ్యాధులు అభివృద్ధి చెందుతాయి. సోకిన పండ్లు గట్టి, నల్లటి మమ్మీలుగా ముడుచుకుపోతాయి.",
+                grape_black_rot_prevention: "నియంత్రణ చర్యలు: 1) మమ్మీకరించిన పండ్లను తొలగించడం, 2) సోకిన కాండాలను కత్తిరించి పారవేయడం, 3) మంచి గాలి ప్రసరణను నిర్వహించడం, 4) రక్షణ శిలీంధ్రనాశినులను వర్తించడం.",
+
+                pepper_bacterial_spot_description: "బ్యాక్టీరియల్ స్పాట్ ఆకులు మరియు పండ్లపై చిన్న, ముదురు గోధుమ రంగు మచ్చలను కలిగిస్తుంది. మచ్చలు విలీనం అయి పెద్ద మృత కణజాల ప్రాంతాలను ఏర్పరచవచ్చు. తీవ్రంగా సోకిన ఆకులు పసుపు రంగుకు మారి రాలిపోవచ్చు. పండ్ల మచ్చలు మిరపకాయలను మార్కెట్ చేయలేనివిగా చేస్తాయి.",
+                pepper_bacterial_spot_prevention: "నివారణలో ఇవి ఉన్నాయి: 1) వ్యాధి-రహిత విత్తనాలను ఉపయోగించడం, 2) పంటలను మార్చడం, 3) ఓవర్‌హెడ్ నీటిపారుదలను నివారించడం, 4) మంచి గాలి ప్రసరణను నిర్వహించడం, 5) రాగి ఆధారిత స్ప్రేలను ఉపయోగించడం."
+            },
+            ta: {
+                // Navigation & Common
+                home: 'முகப்பு',
+                aiEngine: 'AI இயந்திரம்',
+                supplements: 'துணை உணவுகள்',
+                cropAdvisor: 'பயிர் ஆலோசகர்',
+                language: 'மொழி',
+                brandName: 'தாவர பராமரிப்பு AI',
+                services: 'சேவைகள்',
+                about: 'பற்றி',
+
+                // Home page
+                plantDiseaseDetection: '🍁தாவர நோய் கண்டறிதல்🍁',
+                aiEngineHelp: 'இந்த AI இயந்திரம் பின்வரும் பழங்கள் மற்றும் காய்கறிகளில் இருந்து நோயைக் கண்டறிய உதவும்',
+                note: 'குறிப்பு✍🏻',
+                openLaptop: 'தயவுசெய்து🙏 இந்த தளத்தை லேப்டாப்/PC 💻 திரையில் மட்டுமே திறக்கவும்',
+                thankYou: 'நன்றி 🤝',
+
+                // AI Engine page
+                uploadImage: 'படத்தை பதிவேற்றவும்',
+                chooseFile: 'கோப்பைத் தேர்ந்தெடுக்கவும்',
+                noFileChosen: 'கோப்பு தேர்ந்தெடுக்கப்படவில்லை',
+                predict: 'கணிக்க',
+                uploadInstructions: 'உங்கள் தாவர இலையின் படத்தை பதிவேற்றி AI மாயத்தைப் பாருங்கள்',
+                openCamera: 'கேமராவைத் திறக்கவும்',
+                capturePhoto: 'புகைப்படம் எடுக்கவும்',
+                whyDetectDisease: 'தாவரத்தில் நோயைக் கண்டறிவது ஏன் அவசியம்?',
+                diseaseExplanation: 'தாவர நோய்கள் அவற்றின் இனங்களின் வளர்ச்சியை பாதிக்கின்றன. கூடுதலாக, தாவரங்களில் நோய்களைக் கண்டறிவதற்கான சில ஆராய்ச்சி இடைவெளிகள் அடையாளம் காணப்படுகின்றன, அவற்றின் அறிகுறிகள் தெளிவாகத் தோன்றுவதற்கு முன்பே. நோய் கண்டறிதல் என்பது தாவர நோயியல் நிபுணரின் பயிற்சியில் மிக முக்கியமான அம்சங்களில் ஒன்றாகும். நோய் மற்றும் நோய்க்காரணியை சரியாக அடையாளம் காணாமல், நோய் கட்டுப்பாட்டு நடவடிக்கைகள் நேரம் மற்றும் பணத்தை வீணடிக்கும் மற்றும் மேலும் தாவர இழப்புகளுக்கு வழிவகுக்கும். சரியான நோய் கண்டறிதல் அவசியம்.',
+                preventStepsTitle: 'தாவர நோயைத் தடுக்க கீழ்க்கண்ட படிகளைப் பின்பற்றவும்:',
+                preventStep1: 'நல்ல சுகாதார நடைமுறைகளைப் பின்பற்றவும்.',
+                preventStep2: 'உங்கள் தாவரங்களை ஆரோக்கியமாக வைத்திருக்க உரமிடுங்கள்.',
+                preventStep3: 'தாவரங்களை வீட்டிற்கு கொண்டு வருவதற்கு முன் நோய்களுக்காக சோதிக்கவும்.',
+                preventStep4: 'நடவு செய்வதற்கு முன் மண் வெப்பமடைய அனுமதிக்கவும்.',
+                preventStep5: 'பயிர்களை சுழற்சி முறையில் மாற்றி ஆரோக்கியமான காய்கறித் தோட்டத்தை உறுதி செய்யவும்.',
+                preventStep6: 'நல்ல காற்றோட்டத்தை வழங்கவும்',
+                preventStep7: 'நோய்வாய்ப்பட்ட தண்டுகள் மற்றும் இலைகளை அகற்றவும்',
+                moreInfo: 'மேலும் தகவல்',
+                submit: 'சமர்ப்பிக்க',
+
+                // Supplements page
+                supplementsTitle: '🛒துணை உணவுகள்🛒',
+                supplementsDescription: 'துணை உணவுகள் & உரங்களை ஒரே இடத்தில் வாங்குங்கள்',
+                buyProduct: 'பொருளை வாங்க',
+                healthy: 'ஆரோக்கியமான',
+                diseased: 'நோய்வாய்ப்பட்ட',
+                fertilizer: 'உரம்',
+                forText: 'க்கு',
+
+                // Crop Advisor page
+                cropRecommendation: 'பயிர் பரிந்துரை',
+                findSuitableCrop: 'உங்கள் பண்ணையில் வளர்க்க மிகவும் பொருத்தமான பயிரைக் கண்டறியவும்',
+                nitrogen: 'நைட்ரஜன்',
+                phosphorous: 'பாஸ்பரஸ்',
+                potassium: 'பொட்டாசியம்',
+                phLevel: 'pH அளவு',
+                rainfall: 'மழைப்பொழிவு (மிமீ)',
+                state: 'மாநிலம்',
+                city: 'நகரம்',
+                predictionResult: 'கணிப்பு முடிவு',
+                enterValueExample: 'மதிப்பை உள்ளிடவும் (எடுத்துக்காட்டு:50)',
+                enterValue: 'மதிப்பை உள்ளிடவும்',
+
+                // Fruits and veggies
+                apple: 'ஆப்பிள்',
+                blueberry: 'புளூபெர்ரி',
+                cherry: 'செர்ரி',
+                corn: 'சோளம்',
+                grape: 'திராட்சை',
+                orange: 'ஆரஞ்சு',
+                peach: 'பீச்',
+                pepperBell: 'கேப்சிகம்',
+                potato: 'உருளைக்கிழங்கு',
+                raspberry: 'ராஸ்பெர்ரி',
+                soybean: 'சோயாபீன்',
+                squash: 'பரங்கிக்காய்',
+                strawberry: 'ஸ்ட்ராபெர்ரி',
+                tomato: 'தக்காளி',
+
+                // Disease Detection Results
+                diseaseResult: "நோய் கண்டறிதல் முடிவு",
+                healthyTipsTitle: "ஆரோக்கியமான தாவரங்களை வளர்க்க குறிப்புகள் :",
+                briefDescription: "சுருக்கமான விளக்கம் :",
+                benefitsTitle: "நன்மைகள் :",
+                preventSteps: "இந்த தாவர நோயைத் தடுக்க பின்வரும் படிகளைப் பின்பற்றவும் :",
+                fertilizerTitle: "உரம் :",
+                supplementsTitle: "துணை உணவுகள் :",
+                buyProduct: "பொருளை வாங்க",
+
+                // Disease Specific Translations
+                potato_early_blight_description: "பெரும்பாலான உற்பத்தி பகுதிகளில், ஆரம்ப பிளைட் ஆண்டுதோறும் ஓரளவு ஏற்படுகிறது. ஆரம்ப பிளைட்டின் தீவிரம் மழை, பனி அல்லது நீர்ப்பாசனத்தால் இலைகளின் ஈரப்பதம்; இலைகளின் ஊட்டச்சத்து நிலை; மற்றும் பயிர் உணர்திறன் ஆகியவற்றைப் பொறுத்தது. ஆரம்ப பிளைட்டின் முதல் அறிகுறிகள் பழைய (கீழ்) இலைகளில் சிறிய, வட்ட அல்லது ஒழுங்கற்ற, கருமை-பழுப்பு முதல் கருப்பு புள்ளிகளாக தோன்றுகின்றன. இந்த புள்ளிகள் 3/8 அங்குல விட்டம் வரை பெரிதாகி படிப்படியாக கோண வடிவத்தை பெறலாம். இளம், முழுமையாக விரிவடைந்த இலைகளில் உள்ள ஆரம்ப காயங்களை பழுப்பு புள்ளி காயங்களுடன் குழப்பிக்கொள்ளலாம். தொற்றுக்குப் பிறகு இரண்டு முதல் மூன்று நாட்களில் இந்த முதல் காயங்கள் தோன்றுகின்றன, இந்த காயங்களின் மேற்பரப்பில் மேலும் விதைப்பரவல் மூன்று முதல் ஐந்து நாட்களுக்குப் பிறகு ஏற்படுகிறது.",
+                potato_early_blight_prevention: "நோய் எதிர்ப்பு சக்தி கொண்ட உருளைக்கிழங்கு வகைகளை நடவு செய்வதன் மூலம் ஆரம்ப பிளைட் சிகிச்சையில் தடுப்பு அடங்கும்; தாமதமாக முதிர்ச்சியடையும் வகைகள் முன்கூட்டியே முதிர்ச்சியடையும் வகைகளை விட அதிக எதிர்ப்பு சக்தி கொண்டவை. மேல்நிலை நீர்ப்பாசனத்தைத் தவிர்க்கவும் மற்றும் இலைகள் விரைவாக உலர்வதற்கு செடிகளுக்கு இடையே போதுமான காற்றோட்டத்தை அனுமதிக்கவும்.",
+
+                apple_scab_description: "ஆப்பிள் ஸ்கேப் என்பது வென்டூரியா இனேக்வாலிஸ் பூஞ்சையால் ஏற்படும் ஆப்பிள் மரங்களின் பொதுவான நோய். இலைகள் மற்றும் பழங்களில் ஆலிவ் பச்சை முதல் பழுப்பு நிற புள்ளிகளாக நோய் தோன்றும். கடுமையான தொற்றுகள் இலைகள் உதிர்வதற்கும் பழத்தின் தரம் மற்றும் மகசூல் குறைவதற்கும் காரணமாகலாம்.",
+                apple_scab_prevention: "ஆப்பிள் ஸ்கேப்பைத் தடுக்க: 1) இலையுதிர் காலத்தில் விழுந்த இலைகளை அகற்றவும், 2) காற்றோட்டத்தை மேம்படுத்த மரங்களை கத்தரிக்கவும், 3) வளர்ச்சி பருவத்தில் பூஞ்சைக்கொல்லிகளை பயன்படுத்தவும், 4) முடிந்தவரை எதிர்ப்பு ரகங்களை நடவும்.",
+
+                apple_black_rot_description: "கருப்பு அழுகல் என்பது ஆப்பிள் மரங்களை பாதிக்கும் பூஞ்சை நோய், இது இலைப் புள்ளிகள், பழ அழுகல் மற்றும் கிளைகளில் கேங்கர்களை ஏற்படுத்துகிறது. நோய் மரத்தின் அனைத்து பாகங்களையும் பாதிக்கலாம் மற்றும் குறிப்பாக பழங்களுக்கு சேதம் விளைவிக்கலாம்.",
+                apple_black_rot_prevention: "கட்டுப்பாட்டு நடவடிக்கைகளில் அடங்கும்: 1) இறந்த அல்லது நோய்வாய்ப்பட்ட மரத்தை வெட்டுதல், 2) மமியாக்கப்பட்ட பழங்களை அகற்றுதல், 3) நல்ல சுகாதாரத்தை பராமரித்தல், 4) தேவைப்படும்போது பூஞ்சைக்கொல்லிகளைப் பயன்படுத்துதல்.",
+
+                tomato_late_blight_description: "லேட் ப்ளைட் என்பது பைட்டோப்தோரா இன்ஃபெஸ்டன்ஸால் ஏற்படும் தக்காளியின் அழிவுகரமான நோய். இது இலைகளில் பெரிய, கருமை-பழுப்பு நிற திட்டுகளை ஏற்படுத்தி, முழு தாவரங்களையும் விரைவாக கொல்லக்கூடும். பழத்தில் பெரிய, கடினமான, கருமை-பழுப்பு நிற புள்ளிகள் உருவாகும்.",
+                tomato_late_blight_prevention: "லேட் ப்ளைட்டை தடுக்க: 1) எதிர்ப்பு ரகங்களைப் பயன்படுத்துதல், 2) காற்றோட்டத்தை மேம்படுத்துதல், 3) தாவரங்களின் அடிப்பகுதியில் நீர் பாய்ச்சுதல், 4) ஈரப்பதமான வானிலையில் முன்னெச்சரிக்கையாக பூஞ்சைக்கொல்லிகளை பயன்படுத்துதல்.",
+
+                corn_common_rust_description: "பொதுவான துரு இரண்டு இலை மேற்பரப்புகளிலும் சிறிய, வட்ட முதல் நீள்வட்ட பழுப்பு நிற புஸ்துலங்களாக தோன்றும். புஸ்துலங்களில் எளிதில் துடைக்கக்கூடிய துரு நிற ஸ்போர்கள் உள்ளன. கடுமையான தொற்றுகள் குறிப்பிடத்தக்க மகசூல் இழப்பை ஏற்படுத்தக்கூடும்.",
+                corn_common_rust_prevention: "மேலாண்மை உத்திகளில் அடங்கும்: 1) எதிர்ப்பு கலப்பினங்களை நடுதல், 2) முன்கூட்டியே நடுதல், 3) வயல்களை தொடர்ந்து கண்காணித்தல், 4) தேவைப்படும்போது பூஞ்சைக்கொல்லிகளை பயன்படுத்துதல்.",
+
+                grape_black_rot_description: "கருப்பு அழுகல் திராட்சையின் மிக முக்கியமான நோய்களில் ஒன்றாகும். பூஞ்சை கொடியின் அனைத்து பச்சை பாகங்களையும் தொற்றக்கூடும். இலைகளில், பழுப்பு நிற வட்ட புண்கள் உருவாகும். பாதிக்கப்பட்ட பழங்கள் கடினமான, கருப்பு மமிகளாக சுருங்கிவிடும்.",
+                grape_black_rot_prevention: "கட்டுப்பாட்டு நடவடிக்கைகள்: 1) மமியாக்கப்பட்ட பழங்களை அகற்றுதல், 2) பாதிக்கப்பட்ட கொடிகளை வெட்டி அகற்றுதல், 3) நல்ல காற்றோட்டத்தை பராமரித்தல், 4) பாதுகாப்பு பூஞ்சைக்கொல்லிகளை பயன்படுத்துதல்.",
+
+                pepper_bacterial_spot_description: "பாக்டீரியல் ஸ்பாட் இலைகள் மற்றும் பழங்களில் சிறிய, கருமை-பழுப்பு நிற புள்ளிகளை ஏற்படுத்துகிறது. புள்ளிகள் இணைந்து பெரிய இறந்த திசு பகுதிகளை உருவாக்கலாம். கடுமையாக பாதிக்கப்பட்ட இலைகள் மஞ்சள் நிறமாகி உதிரலாம். பழ புள்ளிகள் மிளகாய்களை சந்தைப்படுத்த முடியாமல் செய்கின்றன.",
+                pepper_bacterial_spot_prevention: "தடுப்பு முறைகளில் அடங்கும்: 1) நோய் இல்லாத விதைகளைப் பயன்படுத்துதல், 2) பயிர் சுழற்சி செய்தல், 3) மேல்நிலை நீர்ப்பாசனத்தைத் தவிர்த்தல், 4) நல்ல காற்றோட்டத்தை பராமரித்தல், 5) செம்பு அடிப்படையிலான தெளிப்புகளைப் பயன்படுத்துதல்."
+            },
+            hi: {
+                // Navigation & Common
+                home: 'होम',
+                aiEngine: 'AI इंजन',
+                supplements: 'सप्लीमेंट्स',
+                cropAdvisor: 'फसल सलाहकार',
+                language: 'भाषा',
+                brandName: 'पौधा देखभाल AI',
+                services: 'सेवाएं',
+                about: 'हमारे बारे में',
+
+                // Home page
+                plantDiseaseDetection: '🍁पौधों की बीमारी की पहचान🍁',
+                aiEngineHelp: 'यह AI इंजन निम्नलिखित फलों और सब्जियों से बीमारी का पता लगाने में मदद करेगा',
+                note: 'नोट✍🏻',
+                openLaptop: 'कृपया🙏 इस साइट को लैपटॉप/PC 💻 स्क्रीन पर ही खोलें',
+                thankYou: 'धन्यवाद 🤝',
+
+                // AI Engine page
+                uploadImage: 'छवि अपलोड करें',
+                chooseFile: 'फ़ाइल चुनें',
+                noFileChosen: 'कोई फ़ाइल नहीं चुनी गई',
+                predict: 'पहचानें',
+                uploadInstructions: 'अपने पौधे की पत्ती की छवि अपलोड करें और AI का जादू देखें',
+                openCamera: 'कैमरा खोलें',
+                capturePhoto: 'फोटो लें',
+                whyDetectDisease: 'पौधे में बीमारी का पता लगाना क्यों आवश्यक है?',
+                diseaseExplanation: 'पौधों की बीमारियां उनकी प्रजातियों की वृद्धि को प्रभावित करती हैं। इसके अलावा, पौधों में बीमारियों का पता लगाने के लिए कुछ शोध अंतराल पहचाने गए हैं, उनके लक्षण स्पष्ट रूप से दिखाई देने से पहले ही। रोग निदान एक पादप रोगविज्ञानी के प्रशिक्षण का सबसे महत्वपूर्ण पहलू है। बीमारी और रोगजनक एजेंट की सही पहचान के बिना, रोग नियंत्रण उपाय समय और पैसे की बर्बादी हो सकते हैं और आगे पौधों के नुकसान का कारण बन सकते हैं। सही रोग निदान आवश्यक है।',
+                preventStepsTitle: 'पौधों की बीमारी को रोकने के लिए नीचे दिए गए चरणों का पालन करें:',
+                preventStep1: 'अच्छी स्वच्छता प्रथाओं का पालन करें।',
+                preventStep2: 'अपने पौधों को स्वस्थ रखने के लिए उर्वरक दें।',
+                preventStep3: 'पौधों को घर लाने से पहले बीमारियों के लिए जांच करें।',
+                preventStep4: 'रोपण से पहले मिट्टी को गरम होने दें।',
+                preventStep5: 'फसल चक्र द्वारा स्वस्थ सब्जी बगीचा सुनिश्चित करें।',
+                preventStep6: 'अच्छा वायु संचार प्रदान करें',
+                preventStep7: 'रोगग्रस्त तनों और पत्तियों को हटा दें',
+                moreInfo: 'अधिक जानकारी',
+                submit: 'जमा करें',
+
+                // Supplements page
+                supplementsTitle: '🛒सप्लीमेंट्स🛒',
+                supplementsDescription: 'सप्लीमेंट्स और उर्वरक एक ही जगह पर खरीदें',
+                buyProduct: 'खरीदें',
+                healthy: 'स्वस्थ',
+                diseased: 'रोगग्रस्त',
+                fertilizer: 'उर्वरक',
+                forText: 'के लिए',
+
+                // Crop Advisor page
+                cropRecommendation: 'फसल की सिफारिश',
+                findSuitableCrop: 'अपने खेत में उगाने के लिए सबसे उपयुक्त फसल का पता लगाएं',
+                nitrogen: 'नाइट्रोजन',
+                phosphorous: 'फास्फोरस',
+                potassium: 'पोटैशियम',
+                phLevel: 'pH स्तर',
+                rainfall: 'वर्षा (मिमी में)',
+                state: 'राज्य',
+                city: 'शहर',
+                predictionResult: 'परिणाम की भविष्यवाणी',
+                enterValueExample: 'मान दर्ज करें (उदाहरण:50)',
+                enterValue: 'मान दर्ज करें',
+
+                // Fruits and veggies
+                apple: 'सेब',
+                blueberry: 'ब्लूबेरी',
+                cherry: 'चेरी',
+                corn: 'मक्का',
+                grape: 'अंगूर',
+                orange: 'संतरा',
+                peach: 'आड़ू',
+                pepperBell: 'शिमला मिर्च',
+                potato: 'आलू',
+                raspberry: 'रास्पबेरी',
+                soybean: 'सोयाबीन',
+                squash: 'स्क्वैश',
+                strawberry: 'स्ट्रॉबेरी',
+                tomato: 'टमाटर',
+
+                // Disease Detection Results
+                diseaseResult: "रोग पहचान परिणाम",
+                healthyTipsTitle: "स्वस्थ पौधे उगाने के लिए सुझाव :",
+                briefDescription: "संक्षिप्त विवरण :",
+                benefitsTitle: "लाभ :",
+                preventSteps: "इस पौधे की बीमारी को रोकने के लिए निम्नलिखित चरणों का पालन करें :",
+                fertilizerTitle: "उर्वरक :",
+                supplementsTitle: "पूरक :",
+                buyProduct: "उत्पाद खरीदें",
+
+                // Disease Specific Translations
+                potato_early_blight_description: "अधिकांश उत्पादन क्षेत्रों में, अर्ली ब्लाइट सालाना कुछ हद तक होता है। अर्ली ब्लाइट की गंभीरता बारिश, ओस, या सिंचाई से पत्तियों की नमी की आवृत्ति; पत्तियों की पोषण स्थिति; और किस्म की संवेदनशीलता पर निर्भर करती है। अर्ली ब्लाइट के पहले लक्षण पुराने (निचले) पत्तों पर छोटे, गोल या अनियमित, गहरे भूरे से काले धब्बों के रूप में दिखाई देते हैं। ये धब्बे 3/8 इंच व्यास तक बढ़ जाते हैं और धीरे-धीरे कोणीय आकार के हो सकते हैं। युवा, पूरी तरह से फैले हुए पत्तों पर प्रारंभिक घाव भूरे धब्बे के घावों के साथ भ्रमित हो सकते हैं। संक्रमण के दो से तीन दिन बाद ये पहले घाव दिखाई देते हैं, इन घावों की सतह पर आगे का बीजाणुजनन तीन से पांच दिन बाद होता है।",
+                potato_early_blight_prevention: "अर्ली ब्लाइट के उपचार में रोग प्रतिरोधी आलू की किस्मों को लगाकर रोकथाम शामिल है; देर से पकने वाली किस्में जल्दी पकने वाली किस्मों की तुलना में अधिक प्रतिरोधी होती हैं। ऊपरी सिंचाई से बचें और पौधों के बीच पर्याप्त वायु संचार की अनुमति दें ताकि पत्तियां जल्द से जल्द सूख जाएं।",
+
+                apple_scab_description: "सेब का खुरचन वेंचुरिया इनिक्वालिस नामक कवक के कारण होने वाला सेब के पेड़ों का एक आम रोग है। यह रोग पत्तियों और फलों पर जैतून-हरे से भूरे रंग के धब्बों के रूप में दिखाई देता है। गंभीर संक्रमण से पत्तियां झड़ सकती हैं और फल की गुणवत्ता और उपज कम हो सकती है।",
+                apple_scab_prevention: "सेब के खुरचन को रोकने के लिए: 1) पतझड़ में गिरी हुई पत्तियों को हटा दें, 2) हवा के संचार को बेहतर बनाने के लिए पेड़ों की छंटाई करें, 3) बढ़वार के मौसम में फफूंदनाशक का छिड़काव करें, 4) जहां संभव हो प्रतिरोधी किस्मों को लगाएं।",
+
+                apple_black_rot_description: "काला सड़न एक फफूंद रोग है जो सेब के पेड़ों को प्रभावित करता है, जिससे पत्तियों पर धब्बे, फल सड़न और शाखाओं पर कैंकर होता है। यह रोग पेड़ के सभी हिस्सों को प्रभावित कर सकता है और विशेष रूप से फलों को नुकसान पहुंचा सकता है।",
+                apple_black_rot_prevention: "नियंत्रण उपायों में शामिल हैं: 1) मृत या रोगग्रस्त लकड़ी को काटकर हटाना, 2) ममीकृत फलों को हटाना, 3) अच्छी स्वच्छता बनाए रखना, 4) आवश्यकता पड़ने पर फफूंदनाशकों का उपयोग करना।",
+
+                tomato_late_blight_description: "लेट ब्लाइट फाइटोफ्थोरा इनफेस्टन्स के कारण होने वाला टमाटर का एक विनाशकारी रोग है। यह पत्तियों पर बड़े, गहरे भूरे धब्बे बनाता है और पूरे पौधों को जल्दी मार सकता है। फल में बड़े, कड़े, गहरे भूरे धब्बे विकसित होते हैं।",
+                tomato_late_blight_prevention: "लेट ब्लाइट को इस प्रकार रोकें: 1) प्रतिरोधी किस्मों का उपयोग करें, 2) हवा का संचार बेहतर करें, 3) पौधों के आधार पर पानी दें, 4) नम मौसम में निवारक फफूंदनाशकों का छिड़काव करें।",
+
+                corn_common_rust_description: "आम जंग दोनों पत्ती सतहों पर छोटे, गोल से लंबे भूरे पुस्टुल्स के रूप में दिखाई देता है। पुस्टुल्स में जंग के रंग के बीजाणु होते हैं जिन्हें आसानी से रगड़कर हटाया जा सकता है। गंभीर संक्रमण से महत्वपूर्ण उपज हानि हो सकती है।",
+                corn_common_rust_prevention: "प्रबंधन रणनीतियों में शामिल हैं: 1) प्रतिरोधी संकरों की बुवाई, 2) जल्दी बुवाई, 3) खेतों की नियमित निगरानी, 4) आवश्यकता पड़ने पर फफूंदनाशकों का छिड़काव।",
+
+                grape_black_rot_description: "काला सड़न अंगूर के सबसे गंभीर रोगों में से एक है। कवक बेल के सभी हरे भागों को संक्रमित कर सकता है। पत्तियों पर, भूरे रंग के गोल घाव विकसित होते हैं। संक्रमित फल कड़े, काले ममी में सिकुड़ जाते हैं।",
+                grape_black_rot_prevention: "नियंत्रण उपाय: 1) ममीकृत फल हटाएं, 2) संक्रमित टहनियों को काटकर नष्ट करें, 3) अच्छा हवा संचार बनाए रखें, 4) सुरक्षात्मक फफूंदनाशकों का छिड़काव करें।",
+
+                pepper_bacterial_spot_description: "बैक्टीरियल स्पॉट पत्तियों और फलों पर छोटे, गहरे भूरे धब्बे बनाता है। धब्बे विलय होकर मृत ऊतक के बड़े क्षेत्र बना सकते हैं। गंभीर रूप से संक्रमित पत्तियां पीली पड़कर झड़ सकती हैं। फल के धब्बे मिर्च को बाजार में बेचने योग्य नहीं छोड़ते।",
+                pepper_bacterial_spot_prevention: "रोकथाम में शामिल हैं: 1) रोग-मुक्त बीजों का उपयोग, 2) फसल चक्र, 3) ऊपरी सिंचाई से बचें, 4) अच्छा हवा संचार बनाए रखें, 5) तांबे-आधारित स्प्रे का उपयोग करें।"
+            }
+        };
+
+
+
+        <script>
+        // Rest of your JS
+    </script>
+    <!-- Chatbot Styles -->
+    <style>
+        /* Chatbot Button */
+        #chat-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            text-align: center;
+            font-size: 28px;
+            line-height: 58px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            z-index: 10000;
+            transition: transform 0.3s;
+        }
+
+        #chat-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Chat Window */
+        #chat-window {
+            display: none;
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 350px;
+            height: 500px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+            z-index: 10000;
+            flex-direction: column;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            animation: slideUp 0.3s ease-out;
+            border: 1px solid #e0e0e0;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Chat Header */
+        .chat-header {
+            background: #28a745;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Chat Messages */
+        #chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .message {
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .bot {
+            background: #e8f5e9;
+            color: #2e7d32;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .user {
+            background: #28a745;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        /* Quick Replies */
+        #quick-replies {
+            padding: 10px;
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .chip {
+            background: #fff;
+            border: 1px solid #28a745;
+            color: #28a745;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: 0.2s;
+        }
+
+        .chip:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Chat Input */
+        .chat-input-area {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #eee;
+            background: white;
+        }
+
+        .chat-input-area input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 10px;
+            font-size: 1rem;
+        }
+
+        .chat-input-area button {
+            background: none;
+            border: none;
+            color: #28a745;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0 10px;
+        }
+    </style>
+
+    <!-- Floating Chat Button -->
+    <div id="chat-btn" onclick="toggleChat()">
+        <i class="fas fa-robot"></i>
+    </div>
+
+    <!-- Chat Window -->
+    <div id="chat-window">
+        <div class="chat-header">
+            <span><i class="fas fa-leaf mr-2"></i> Plant Doctor AI</span>
+            <span onclick="toggleChat()" style="cursor: pointer;"><i class="fas fa-times"></i></span>
+        </div>
+        <div id="chat-messages">
+            <div class="message bot">
+                Hello! I am your AI Plant Doctor. 🌿<br>How can I help you today?
+            </div>
+        </div>
+        <div id="quick-replies">
+            <span class="chip" onclick="sendQuery('How to use this app?')">How to use?</span>
+            <span class="chip" onclick="sendQuery('Watering Tips')">Watering</span>
+            <span class="chip" onclick="sendQuery('Common Diseases')">Diseases</span>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="user-input" placeholder="Type a question..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Chatbot Logic -->
+    <script>
+            function toggleChat() {
+            const window = document.getElementById('chat-window');
+            window.style.display = window.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+            function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+            function sendQuery(text) {
+            const input = document.getElementById('user-input');
+            input.value = text;
+            sendMessage();
+        }
+
+            function sendMessage() {
+            const input = document.getElementById('user-input');
+            const msg = input.value.trim();
+            if (!msg) return;
+
+            // Add User Message
+            addMessage(msg, 'user');
+            input.value = '';
+
+            // Simulate AI Typing
+            const chatBody = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing';
+            typingDiv.innerHTML = '<i class="fas fa-ellipsis-h"></i>';
+            chatBody.appendChild(typingDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+
+            // Simple Rule-Based Response
+            setTimeout(() => {
+                try {
+                chatBody.removeChild(typingDiv);
+                } catch(e){ }
+            const response = getBotResponse(msg);
+            addMessage(response, 'bot');
+            }, 800);
+        }
+
+            function addMessage(text, sender) {
+            const div = document.createElement('div');
+            div.className = `message ${sender}`;
+            div.innerHTML = text;
+            const chatBody = document.getElementById('chat-messages');
+            chatBody.appendChild(div);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+
+        function getBotResponse(query) {
+            const q = query.toLowerCase();
+            if (q.includes('use') || q.includes('work')) return "It's easy! <br>1. Go to 'AI Engine'. <br>2. Upload a leaf photo. <br>3. Get instant results!";
+            if (q.includes('care') || q.includes('tip')) return "General Tips: <br>💧 Water early morning. <br>☀️ Ensure 6-8h sunlight. <br>✂️ Prune dead leaves.";
+            if (q.includes('disease') || q.includes('common')) return "I can detect 39 diseases! Common ones are Apple Scab, Potato Blight, and Tomato Leaf Curl.";
+            if (q.includes('water')) return "Check soil moisture first! Most plants need watering when the top inch of soil is dry.";
+            if (q.includes('fertilizer') || q.includes('feed')) return "Use balanced NPK fertilizers. Nitrogen for leaves, Phosphorus for roots/flowers, Potassium for health.";
+            if (q.includes('hello') || q.includes('hi')) return "Hello farmer! 🚜 Ready to check some plants?";
+            
+            return "I'm still learning! Try asking about 'Watering', 'Usage', or 'Diseases'.";
+        }
+    </script>
+</body>
+<!-- <script>
+    if (window.matchMedia("(max-width: 767px)").matches)
+    {
+        // The viewport is less than 768 pixels wide
+        document.write("This is a mobile device.");
+        window.location.replace('/mobile-device');
+
+    } else {
+        
+        // The viewport is at least 768 pixels wide
+        document.write("This is a tablet or desktop.");
+    }
+</script> -->
+<!-- <script>
+    if(screen.width <= 700){
+        document.location = 'manthan2.html';
+    }
+</script> -->
+
+</html>

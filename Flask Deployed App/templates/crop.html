@@ -1,0 +1,208 @@
+{% extends 'base.html' %} {% block pagetitle %}
+<span data-translate="cropRecommendation">Crop Recommendation</span>
+{% endblock pagetitle %} {% block body %}
+
+<style>
+    html body {
+        background-color: #4ECC5A;
+        min-height: 100vh;
+        padding-top: 70px;
+    }
+    .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+        background: rgba(255, 255, 255, 0.98);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .form-container {
+        background-color: rgba(255, 255, 255, 0.98);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        margin-bottom: 30px;
+        transition: transform 0.3s ease;
+    }
+    .btn-primary {
+        background: linear-gradient(135deg, #d00509 0%, #822c01 100%);
+        border: none;
+        padding: 12px 40px;
+        margin-top: 20px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(135deg, #ff3d3e 0%, #ff8855 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(255, 78, 80, 0.3);
+    }
+    .form-control:focus {
+        border-color: #ff9966;
+        box-shadow: 0 0 0 0.2rem rgba(255, 153, 102, 0.25);
+    }
+    .prediction-result {
+        background-color: rgba(255, 255, 255, 0.95);
+        padding: 30px;
+        border-radius: 20px;
+        margin-top: 30px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+    }
+    .prediction-result:hover {
+        transform: translateY(-5px);
+    }
+    .error-message {
+        color: #dc3545;
+        background-color: rgba(248, 215, 218, 0.9);
+        border: 2px solid #f5c6cb;
+        padding: 15px;
+        border-radius: 12px;
+        margin-top: 25px;
+        font-size: 1rem;
+    }
+    .btn-primary {
+        background-color: #4a90e2;
+        border: none;
+        padding: 12px 40px;
+        font-size: 1.1rem;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #357abd;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    .prediction-result h3 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        font-weight: 600;
+    }
+    pre {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 12px;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        white-space: pre-wrap;
+    }
+</style>
+
+<div class="container py-5">
+    <h2 class="text-center mb-4" style="color: black">
+        <b><span data-translate="findSuitableCrop">Find out the most suitable crop to grow in your farm</span></b>
+    </h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="form-container">
+                <form method="POST" action="{{ url_for('crop_recommendation') }}">
+                    <div class="form-group">
+                        <label for="Nitrogen" class="form-label"><b><span data-translate="nitrogen">Nitrogen</span></b></label>
+                        <input type="number" class="form-control" id="Nitrogen" name="nitrogen"
+                            placeholder="Enter the value (example:50)" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Phosphorous" class="form-label"><b><span data-translate="phosphorous">Phosphorous</span></b></label>
+                        <input type="number" class="form-control" id="Phosphorous" name="phosphorous"
+                            placeholder="Enter the value (example:50)" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Pottasium" class="form-label"><b><span data-translate="potassium">Potassium</span></b></label>
+                        <input type="number" class="form-control" id="Pottasium" name="pottasium"
+                            placeholder="Enter the value (example:50)" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ph" class="form-label"><b><span data-translate="phLevel">pH level</span></b></label>
+                        <input type="number" step="0.01" class="form-control" id="ph" name="ph"
+                            placeholder="Enter the value" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Rainfall" class="form-label"><b><span data-translate="rainfall">Rainfall (in mm)</span></b></label>
+                        <input type="number" step="0.01" class="form-control" id="Rainfall" name="rainfall"
+                            placeholder="Enter the value" required />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="State" class="form-label"><b><span data-translate="state">State</span></b></label>
+                        <select onchange="print_city('state', this.selectedIndex);" id="sts" name="state"
+                            class="form-control" required></select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="City" class="form-label"><b><span data-translate="city">City</span></b></label>
+                        <select id="state" class="form-control" name="city" required></select>
+                    </div>
+                    <script src="{{ url_for('static', filename='js/state_city.js') }}"></script>
+                    <script>print_state('sts');</script>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-primary btn-lg px-5">
+                            <span data-translate="predict">Predict</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            {% if prediction %}
+            <div class="prediction-result">
+                <h3 class="text-center mb-4"><span data-translate="predictionResult">Prediction Result</span></h3>
+                <pre class="mb-0">{{ prediction }}</pre>
+            </div>
+            {% endif %}
+
+            {% if error %}
+            <div class="error-message">
+                {{ error }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<script>
+    // Add translation support for dynamic content
+    window.addEventListener('languageChanged', (event) => {
+        const lang = event.detail.language;
+        const translations = window.translations || {};
+        
+        // Update placeholders
+        document.querySelectorAll('input[type="number"]').forEach(input => {
+            if (input.id === 'Nitrogen' || input.id === 'Phosphorous' || input.id === 'Pottasium') {
+                input.placeholder = translations[lang]?.enterValueExample || 'Enter the value (example:50)';
+            } else {
+                input.placeholder = translations[lang]?.enterValue || 'Enter the value';
+            }
+        });
+    });
+
+    // Initial translation update
+    document.addEventListener('DOMContentLoaded', () => {
+        const storedLang = localStorage.getItem('preferredLanguage') || 'en';
+        const event = new CustomEvent('languageChanged', { detail: { language: storedLang } });
+        window.dispatchEvent(event);
+    });
+</script>
+
+{% endblock %}

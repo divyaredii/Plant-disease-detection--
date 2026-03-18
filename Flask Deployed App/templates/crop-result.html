@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block pagetitle %}
+<span data-translate="cropRecommendation">Crop Recommendation</span>
+{% endblock pagetitle %}
+
+{% block body %}
+<style>
+    .crop-card {
+        border: 1px solid #e0e0e0;
+        border-radius: 15px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        margin-bottom: 20px;
+        background: white;
+    }
+    .crop-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .crop-name {
+        font-size: 24px;
+        color: #2c3e50;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    .npk-values {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 10px;
+    }
+    .npk-label {
+        font-weight: 500;
+        color: #666;
+    }
+    .parameter-card {
+        background: white;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .parameter-value {
+        font-size: 18px;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+    .section-title {
+        color: #2c3e50;
+        margin-bottom: 25px;
+        font-weight: bold;
+        border-bottom: 2px solid #4ECC5A;
+        padding-bottom: 10px;
+        display: inline-block;
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4" data-translate="estimatedResult">Based on the soil nutrient parameters:</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Soil Parameters Section -->
+        <div class="col-md-4">
+            <h3 class="section-title" data-translate="yourSoilParameters">Your Soil Parameters</h3>
+            <div class="parameter-card">
+                <div class="mb-3">
+                    <span class="npk-label" data-translate="nitrogen">Nitrogen (N):</span>
+                    <div class="parameter-value">{{ n }}</div>
+                </div>
+                <div class="mb-3">
+                    <span class="npk-label" data-translate="phosphorus">Phosphorus (P):</span>
+                    <div class="parameter-value">{{ p }}</div>
+                </div>
+                <div>
+                    <span class="npk-label" data-translate="potassium">Potassium (K):</span>
+                    <div class="parameter-value">{{ k }}</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommended Crops Section -->
+        <div class="col-md-8">
+            <h3 class="section-title" data-translate="topRecommendedCrops">Top Recommended Crops</h3>
+            <div class="row">
+                {% for crop in crops %}
+                <div class="col-md-6">
+                    <div class="crop-card p-4">
+                        <div class="crop-name">
+                            <span data-translate="{{ crop.lower() }}">{{ crop }}</span>
+                        </div>
+                        <div class="npk-values">
+                            <div class="mb-2">
+                                <span class="npk-label" data-translate="optimalNPK">Optimal NPK values:</span>
+                            </div>
+                            <div>{{ npk_values[crop] }}</div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function updateCropTranslations() {
+    const currentLang = localStorage.getItem('selectedLanguage') || 'en';
+    const elements = document.querySelectorAll('[data-translate]');
+    
+    elements.forEach(element => {
+        const key = element.getAttribute('data-translate');
+        if (cropTranslations[currentLang] && cropTranslations[currentLang][key]) {
+            element.textContent = cropTranslations[currentLang][key];
+        }
+    });
+}
+
+// Listen for language changes
+window.addEventListener('languageChanged', function(event) {
+    updateCropTranslations();
+});
+
+// Initial translation update
+document.addEventListener('DOMContentLoaded', function() {
+    updateCropTranslations();
+});
+</script>
+{% endblock body %}

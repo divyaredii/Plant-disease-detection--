@@ -1,0 +1,30 @@
+# Advanced Features Requirements
+# Install with: pip install -r requirements_advanced.txt
+
+# Core Flask
+Flask==2.3.0
+Werkzeug==2.3.0
+
+# Deep Learning
+torch==2.0.1
+torchvision==0.15.2
+pytorch-grad-cam==1.4.8
+
+# Image Processing
+Pillow==10.0.0
+opencv-python==4.8.0.74
+matplotlib==3.7.2
+
+# Data Processing
+pandas==2.0.3
+numpy==1.24.3
+
+# PDF Generation
+reportlab==4.0.4
+
+# Database
+# SQLite is built-in to Python, no installation needed
+
+# Optional: For better performance
+# gunicorn==21.2.0  # Production server
+# redis==4.6.0  # For caching (if needed)
