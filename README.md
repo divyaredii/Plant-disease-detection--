@@ -13,44 +13,63 @@ Plant disease detection is crucial for farmers to take timely action and prevent
 - 📊 **High Accuracy** - Achieves 97%+ accuracy on test data
 - 🔍 **Ensemble Support** - Multiple model ensemble for improved predictions
 
-## 🚀 Quick Start
+## 🚀 Quick Start (Complete Guide)
 
-### Prerequisites
-- Python 3.8 or higher
-- pip package manager
+### ⚠️ IMPORTANT: Before Cloning
+This repository contains extremely large Deep Learning models (>200MB) which are tracked using **Git LFS (Large File Storage)**. 
+**You MUST have Git LFS installed before you clone the repository**, otherwise the models will be downloaded as broken 1KB pointer files!
 
-### Installation
-
-1. **Clone the repository**
+1. Download and install Git LFS from: https://git-lfs.github.com/
+2. Open your terminal and run this once to activate it:
    ```bash
-   git clone https://github.com/yourusername/Plant-Disease-Detection.git
-   cd Plant-Disease-Detection
+   git lfs install
    ```
 
-2. **Create and activate virtual environment**
+### 💻 Installation Steps
+
+1. **Clone the repository** (Make sure Git LFS is installed first!)
+   ```bash
+   git clone https://github.com/divyaredii/Plant-disease-detection--.git
+   cd Plant-disease-detection--
+   ```
+
+2. **Create and activate a virtual environment** (Highly Recommended)
    ```bash
    python -m venv venv
-   # Windows
+   
+   # For Windows users:
    venv\Scripts\activate
-   # Linux/Mac
+   
+   # For Linux/Mac users:
    source venv/bin/activate
    ```
 
-3. **Install dependencies**
+3. **Install all required dependencies**
    ```bash
+   # This will install PyTorch, Flask, and the new Vision Transformer (timm/transformers) libraries
    pip install -r requirements.txt
    ```
 
-4. **Run the application**
-   ```bash
-   cd "Flask Deployed App"
-   python app.py
-   ```
+### 🏃‍♂️ How to Run the Web Application
 
-5. **Open in browser**
-   ```
-   http://localhost:5000
-   ```
+We now support **two different deep learning engines**. You can run whichever version you prefer:
+
+**Option A: Run the new, highly-advanced Vision Transformer (ViT) model**
+*(Recommended for highest accuracy & state-of-the-art AI)*
+```bash
+cd "Flask Deployed App"
+python app_vit.py
+```
+
+**Option B: Run the original Convolutional Neural Network (CNN) model**
+```bash
+cd "Flask Deployed App"
+python app.py
+```
+
+### 🌍 Open the app
+After running either of the commands above, the application will boot up locally.
+Open your web browser and go to: **[http://localhost:5000](http://localhost:5000)**
 
 ## 📁 Project Structure
 
